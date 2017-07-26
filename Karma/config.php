@@ -7,7 +7,6 @@ use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\ResolverChain;
 use Karma\CallableResolver;
-use Karma\Container;
 use Karma\ControllerInvoker;
 use Slim\Http\Headers;
 use Slim\Http\Response;
@@ -68,5 +67,5 @@ return [
     'callableResolver' => DI\object(CallableResolver::class),
 
     // Aliases
-    ContainerInterface::class => DI\get(Container::class),
+    ContainerInterface::class => DI\get(\DI\Container::class),
 ];

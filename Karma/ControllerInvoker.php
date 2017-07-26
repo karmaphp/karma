@@ -40,8 +40,8 @@ class ControllerInvoker implements InvocationStrategyInterface
         ];
 
         // set request and response on base controller if setRequestResponse method exists
-        if (method_exists($callable, 'setRequestResponse')) {
-            $callable->setRequestResponse($request, $response);
+        if (method_exists($callable[0], 'init')) {
+            $callable[0]->init($request, $response);
         }
 
         // Inject the route arguments by name

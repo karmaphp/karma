@@ -16,12 +16,14 @@ abstract class Controller
     protected $response;
 
     /**
+     * execute after __construct
+     *
      * @see ControllerInvoker
      *
      * @param Request $request
      * @param Response $response
      */
-    public function setRequestResponse($request, $response)
+    public function init($request, $response)
     {
         $this->request = $request;
         $this->response = $response;
