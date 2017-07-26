@@ -1,0 +1,17 @@
+{
+    "name": "karma/karma",
+    "description": "A tiny PHP Application Framework",
+    "type": "library",
+    "require": {
+        "slim/slim": "^3.8",
+        "php-di/php-di": "^5.4",
+        "doctrine/annotations": "^1.5"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "İrfan Evrens",
+            "email": "irfanevrens@gmail.com"
+        }
+    ]
+}
