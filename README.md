@@ -22,6 +22,8 @@ Ortaya koyulan standartlar ve önerileri herkesin benimseyerek kullanması ve ö
 ## Booting (index.php)
 
 ```php
+<?php
+
 require_once 'vendor/autoload.php';
 
 $app = new \Karma\App();
@@ -34,6 +36,8 @@ $app->run();
 Karma Framework `php-di/php-di` paketi ile birlikte gelmektedir ve varsayılan container olarak **php-di** kullanmaktadır.
 
 ```php
+<?php 
+
 require_once 'vendor/autoload.php';
 
 $container = \App\Base\Container::build(
@@ -46,12 +50,12 @@ $app = new \Karma\App($container);
 $app->run();
 ```
 
-## Rouing
+## Routing
 
 Slim Framework routing özelliklerine ek olarak Çözümleme stratejisi olarak `[\App\Controller\MainController::class, 'Index']` şeklinde bir kullanımı mümkün kılmaktadır.
 
 ```php
-<?php
+<?php 
 
 require_once 'vendor/autoload.php';
 
