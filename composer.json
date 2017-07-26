@@ -13,5 +13,10 @@
       "name": "İrfan Evrens",
       "email": "irfanevrens@gmail.com"
     }
-  ]
+  ],
+  "autoload": {
+    "psr-4": {
+      "Karma\\": "Karma"
+    }
+  }
 }
