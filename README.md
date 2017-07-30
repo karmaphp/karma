@@ -1,4 +1,9 @@
 # Karma Framework
+
+[![Build Status](https://travis-ci.org/karmaphp/karma.svg?branch=master)](https://travis-ci.org/karmaphp/karma)
+[![Coverage Status](https://coveralls.io/repos/github/karmaphp/karma/badge.svg?branch=master)](https://coveralls.io/github/karmaphp/karma?branch=master)
+[![Total Downloads](https://poser.pugx.org/karmaphp/karma/downloads)](https://packagist.org/packages/karmaphp/karma)
+
 Mikro frameworklerden Slim Framework üzerine inşa edilmiş bir PHP Application Framework'tür.
 
 ## Misyon
