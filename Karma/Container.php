@@ -29,7 +29,7 @@ class Container extends \DI\Container implements \ArrayAccess
      */
     public static function build($config = [], $useAnnotations = true)
     {
-        $builder = new ContainerBuilder(self::class);
+        $builder = new ContainerBuilder(static::class);
 
         $builder->useAnnotations($useAnnotations);
 
