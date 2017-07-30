@@ -3,9 +3,9 @@
   "description": "A tiny PHP Application Framework",
   "type": "library",
   "require": {
-    "slim/slim": "^3.8",
-    "php-di/php-di": "^5.4",
-    "doctrine/annotations": "^1.5"
+    "slim/slim": "3.8.*",
+    "php-di/php-di": "5.4.*",
+    "doctrine/annotations": "1.4.*"
   },
   "license": "MIT",
   "authors": [
