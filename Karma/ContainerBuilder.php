@@ -43,7 +43,7 @@ class ContainerBuilder
 
         $container = $builder->build();
 
-        $container->set($containerClass, get(ContainerInterface::class));
+        $container->set($containerClass, get(\DI\Container::class));
 
         return $container;
     }
