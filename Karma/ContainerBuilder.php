@@ -43,6 +43,8 @@ class ContainerBuilder
 
         $container = $builder->build();
 
+        $container->set(Request::class, get('request'));
+        $container->set(Response::class, get('response'));
         $container->set($containerClass, get(\DI\Container::class));
 
         return $container;
