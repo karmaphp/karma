@@ -16,8 +16,8 @@ use Slim\Http\Headers;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Router;
+use function DI\create;
 use function DI\get;
-use function DI\object;
 
 class Container extends \DI\Container implements \ArrayAccess
 {
@@ -42,7 +42,7 @@ class Container extends \DI\Container implements \ArrayAccess
     private static function getDefaultConfig()
     {
         return [
-            // Settings that can be customized by users
+
             'settings.httpVersion'                       => '1.1',
             'settings.responseChunkSize'                 => 4096,
             'settings.outputBuffering'                   => 'append',
@@ -62,15 +62,15 @@ class Container extends \DI\Container implements \ArrayAccess
             ],
 
             // Default Slim services
-            'router'            => object(Router::class)
+            'router'            => create(Router::class)
                 ->method('setCacheFile', get('settings.routerCacheFile')),
             Router::class       => get('router'),
-            'errorHandler'      => object(Error::class)
+            'errorHandler'      => create(Error::class)
                 ->constructor(get('settings.displayErrorDetails')),
-            'phpErrorHandler'   => object(PhpError::class)
+            'phpErrorHandler'   => create(PhpError::class)
                 ->constructor(get('settings.displayErrorDetails')),
-            'notFoundHandler'   => object(NotFound::class),
-            'notAllowedHandler' => object(NotAllowed::class),
+            'notFoundHandler'   => create(NotFound::class),
+            'notAllowedHandler' => create(NotAllowed::class),
             'environment'       => function () {
                 return new Environment($_SERVER);
             },
@@ -83,7 +83,7 @@ class Container extends \DI\Container implements \ArrayAccess
 
                 return $response->withProtocolVersion($c->get('settings')['httpVersion']);
             },
-            'foundHandler'      => object(ControllerInvoker::class)
+            'foundHandler'      => create(ControllerInvoker::class)
                 ->constructor(get('foundHandler.invoker')),
 
             'foundHandler.invoker' => function (ContainerInterface $c) {
@@ -99,9 +99,8 @@ class Container extends \DI\Container implements \ArrayAccess
                 return new Invoker(new ResolverChain($resolvers), $c);
             },
 
-            'callableResolver'        => object(CallableResolver::class),
+            'callableResolver' => create(CallableResolver::class),
 
-            // Aliases
             ContainerInterface::class => get(\DI\Container::class),
         ];
     }

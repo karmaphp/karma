@@ -12,47 +12,48 @@ use Slim\Http\Headers;
 use Slim\Http\Response;
 
 return [
-    // Settings that can be customized by users
-    'settings.httpVersion' => '1.1',
-    'settings.responseChunkSize' => 4096,
-    'settings.outputBuffering' => 'append',
+
+    'settings.httpVersion'                       => '1.1',
+    'settings.responseChunkSize'                 => 4096,
+    'settings.outputBuffering'                   => 'append',
     'settings.determineRouteBeforeAppMiddleware' => false,
-    'settings.displayErrorDetails' => false,
-    'settings.addContentLengthHeader' => true,
-    'settings.routerCacheFile' => false,
-    'settings' => [
-        'httpVersion' => DI\get('settings.httpVersion'),
-        'responseChunkSize' => DI\get('settings.responseChunkSize'),
-        'outputBuffering' => DI\get('settings.outputBuffering'),
+    'settings.displayErrorDetails'               => false,
+    'settings.addContentLengthHeader'            => true,
+    'settings.routerCacheFile'                   => false,
+    'settings'                                   => [
+        'httpVersion'                       => DI\get('settings.httpVersion'),
+        'responseChunkSize'                 => DI\get('settings.responseChunkSize'),
+        'outputBuffering'                   => DI\get('settings.outputBuffering'),
         'determineRouteBeforeAppMiddleware' => DI\get('settings.determineRouteBeforeAppMiddleware'),
-        'displayErrorDetails' => DI\get('settings.displayErrorDetails'),
-        'addContentLengthHeader' => DI\get('settings.addContentLengthHeader'),
-        'routerCacheFile' => DI\get('settings.routerCacheFile'),
+        'displayErrorDetails'               => DI\get('settings.displayErrorDetails'),
+        'addContentLengthHeader'            => DI\get('settings.addContentLengthHeader'),
+        'routerCacheFile'                   => DI\get('settings.routerCacheFile'),
     ],
     // Default Slim services
-    'router' => DI\object(Slim\Router::class)
+    'router'                                     => DI\create(Slim\Router::class)
         ->method('setCacheFile', DI\get('settings.routerCacheFile')),
-    Slim\Router::class => DI\get('router'),
-    'errorHandler' => DI\object(Slim\Handlers\Error::class)
+    Slim\Router::class                           => DI\get('router'),
+    'errorHandler'                               => DI\create(Slim\Handlers\Error::class)
         ->constructor(DI\get('settings.displayErrorDetails')),
-    'phpErrorHandler' => DI\object(Slim\Handlers\PhpError::class)
+    'phpErrorHandler'                            => DI\create(Slim\Handlers\PhpError::class)
         ->constructor(DI\get('settings.displayErrorDetails')),
-    'notFoundHandler' => DI\object(Slim\Handlers\NotFound::class),
-    'notAllowedHandler' => DI\object(Slim\Handlers\NotAllowed::class),
-    'environment' => function () {
+    'notFoundHandler'                            => DI\create(Slim\Handlers\NotFound::class),
+    'notAllowedHandler'                          => DI\create(Slim\Handlers\NotAllowed::class),
+    'environment'                                => function () {
         return new Slim\Http\Environment($_SERVER);
     },
-    'request' => function (ContainerInterface $c) {
+    'request'                                    => function (ContainerInterface $c) {
         return \Slim\Http\Request::createFromEnvironment($c->get('environment'));
     },
-    'response' => function (ContainerInterface $c) {
+    'response'                                   => function (ContainerInterface $c) {
         $headers = new Headers(['Content-Type' => 'text/html; charset=UTF-8']);
         $response = new Response(200, $headers);
+
         return $response->withProtocolVersion($c->get('settings')['httpVersion']);
     },
-    'foundHandler' => DI\object(ControllerInvoker::class)
+    'foundHandler'                               => DI\create(ControllerInvoker::class)
         ->constructor(DI\get('foundHandler.invoker')),
-    'foundHandler.invoker' => function (ContainerInterface $c) {
+    'foundHandler.invoker'                       => function (ContainerInterface $c) {
         $resolvers = [
             // Inject parameters by name first
             new AssociativeArrayResolver,
@@ -61,11 +62,12 @@ return [
             // Then fall back on parameters default values for optional route parameters
             new DefaultValueResolver(),
         ];
+
         return new Invoker(new ResolverChain($resolvers), $c);
     },
 
-    'callableResolver' => DI\object(CallableResolver::class),
+    'callableResolver' => DI\create(CallableResolver::class),
 
-    // Aliases
     ContainerInterface::class => DI\get(\DI\Container::class),
+
 ];
