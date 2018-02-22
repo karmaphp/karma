@@ -4,7 +4,7 @@
   "type": "library",
   "require": {
     "slim/slim": "3.9.*",
-    "php-di/php-di": "6.0.*",
+    "php-di/php-di": "5.4.*",
     "doctrine/annotations": "1.4.*",
     "doctrine/instantiator": "1.0.*"
   },

@@ -1,6 +1,7 @@
 <?php namespace Karma\Tests;
 
 use Karma\Container;
+use Karma\ContainerBuilder;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Environment;
@@ -14,7 +15,7 @@ class ContainerTest extends TestCase
 
     public function setUp()
     {
-        $this->container = Container::build();
+        $this->container = ContainerBuilder::build();
     }
 
     /**
@@ -30,7 +31,7 @@ class ContainerTest extends TestCase
      */
     public function testCustomItem()
     {
-        $container = Container::build([
+        $container = ContainerBuilder::build(Container::class, [
             'DB_NAME' => 'testdb'
         ]);
         $this->assertEquals('testdb', $container->get('DB_NAME'));
@@ -41,7 +42,7 @@ class ContainerTest extends TestCase
      */
     public function testOverridedItem()
     {
-        $container = Container::build([
+        $container = ContainerBuilder::build(Container::class, [
             'settings.httpVersion' => '1.2'
         ]);
         $this->assertEquals('1.2', $container->get('settings.httpVersion'));
@@ -65,12 +66,11 @@ class ContainerTest extends TestCase
      */
     public function testGetWithDiConfigErrorThrownAsContainerValueNotFoundException()
     {
-        $container = Container::build();
+        $container = ContainerBuilder::build();
         $container['foo'] =
             function (ContainerInterface $container) {
                 return $container->get('doesnt-exist');
-            }
-        ;
+            };
         $container->get('foo');
     }
 
@@ -82,12 +82,11 @@ class ContainerTest extends TestCase
      */
     public function testGetWithDiConfigErrorThrownAsInvalidArgumentException()
     {
-        $container = Container::build();
+        $container = ContainerBuilder::build();
         $container['foo'] =
             function (ContainerInterface $container) {
                 return $container['doesnt-exist'];
-            }
-        ;
+            };
         $container->get('foo');
     }
 
@@ -104,12 +103,11 @@ class ContainerTest extends TestCase
             ->method('__invoke')
             ->will($this->throwException(new \InvalidArgumentException()));
 
-        $container = Container::build();
+        $container = ContainerBuilder::build();
         $container['foo'] =
             function (ContainerInterface $container) use ($invokable) {
                 call_user_func($invokable);
-            }
-        ;
+            };
         $container->get('foo');
     }
 

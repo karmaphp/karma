@@ -18,7 +18,7 @@ abstract class Controller
     /**
      * execute after __construct
      *
-     * @see ControllerInvoker
+     * @see CallableStrategy
      *
      * @param Request $request
      * @param Response $response

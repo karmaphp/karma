@@ -10,7 +10,7 @@ class App extends \Slim\App
     public function __construct($container = null)
     {
         if (is_null($container)) {
-            $container = Container::build();
+            $container = ContainerBuilder::build();
         }
 
         parent::__construct($container);

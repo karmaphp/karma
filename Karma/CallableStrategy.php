@@ -5,7 +5,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Interfaces\InvocationStrategyInterface;
 
-class ControllerInvoker implements InvocationStrategyInterface
+class CallableStrategy implements InvocationStrategyInterface
 {
     /**
      * @var InvokerInterface

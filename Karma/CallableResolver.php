@@ -1,5 +1,6 @@
 <?php namespace Karma;
 
+use Invoker\CallableResolver as InvokerResolver;
 use Slim\Interfaces\CallableResolverInterface;
 
 /**
@@ -8,11 +9,16 @@ use Slim\Interfaces\CallableResolverInterface;
 class CallableResolver implements CallableResolverInterface
 {
     /**
-     * @var \Invoker\CallableResolver
+     * @var InvokerResolver
      */
     private $callableResolver;
 
-    public function __construct(\Invoker\CallableResolver $callableResolver)
+    /**
+     * CallableResolver constructor.
+     *
+     * @param InvokerResolver $callableResolver
+     */
+    public function __construct(InvokerResolver $callableResolver)
     {
         $this->callableResolver = $callableResolver;
     }
