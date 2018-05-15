@@ -40,14 +40,20 @@ $app->run();
 
 Karma Framework `php-di/php-di` paketi ile birlikte gelmektedir ve varsayılan container olarak **php-di** kullanmaktadır.
 
+Container build ederken ilk parametre olarak Container sınıfı, ikinci olarak da servisler **array** olarak verilmelidir.
+
+Container servislerine `$container->get('smarty')` şeklinde ya da `$container->smarty` şeklinde ulaşabilirsiniz.
+
 ```php
 <?php 
 
 require_once 'vendor/autoload.php';
 
-$container = \App\Base\Container::build(
-    // true olması durumunda çalışma zamanı hatalar sayfada gösterilir.
-    'settings.displayErrorDetails' => true
+$container = \Karma\ContainerBuilder::build(
+    \Karma\Container::class,
+    [
+        'smarty' => \DI\get(\Karma\Service\SmartyService::class)
+    ]
 );
 
 $app = new \Karma\App($container);
@@ -57,16 +63,18 @@ $app->run();
 
 ## Routing
 
-Slim Framework routing özelliklerine ek olarak Çözümleme stratejisi olarak `[\App\Controller\MainController::class, 'Index']` şeklinde bir kullanımı mümkün kılmaktadır.
+Routing stratejisi olarak `[\App\Controller\MainController::class, 'Index']` şeklinde bir kullanım tercih edilmiştir.
 
 ```php
 <?php 
 
 require_once 'vendor/autoload.php';
 
-$container = \Karma\Container::build(
-    // true olması durumunda çalışma zamanı hatalar sayfada gösterilir.
-    'settings.displayErrorDetails' => true
+$container = \Karma\ContainerBuilder::build(
+    \Karma\Container::class,
+    [
+        'smarty' => \DI\get(\Karma\Service\SmartyService::class)
+    ]
 );
 
 $app = new \Karma\App($container);
@@ -94,8 +102,12 @@ class MainController extends Controller
 }
 ```
 
+Controller fonksiyonları `string` ya da `ResponseInterface` dönebilir.
+
+**JSON** response için $this->json() **XML** response için ise $this->xml() fonksiyonları kullanılabilir.
+
 ## View
-View katmanı için `Smarty` ve `Twig` gibi bağımsız bir şekilde kullanılabilen Template Engine'ler tavsiye edilmektedir.
+View katmanı için `Smarty` ya da `Twig` gibi bağımsız bir şekilde kullanılabilen Template Engine'ler tavsiye edilmektedir.
 
 Örnek SmartyService.php `smarty/smarty`
 ```php
@@ -116,13 +128,11 @@ class SmartyService
         $this->smarty->setCompileDir(ROOT_DIR . '/views/smarty_c');
     }
 
-    public function fetch($template, $params = [])
+    public function fetch($template, array $params = [])
     {
-        foreach ($params as $key => $value) {
-            $this->smarty->assign($key, $value);
-        }
-
-        return $this->smarty->fetch($template);
+        return $this->smarty
+            ->assign($params)
+            ->fetch($template);
     }
 }
 ```
