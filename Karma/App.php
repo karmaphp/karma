@@ -1,6 +1,6 @@
 <?php namespace Karma;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 class App extends \Slim\App
 {

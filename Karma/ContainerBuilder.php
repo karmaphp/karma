@@ -1,11 +1,11 @@
 <?php namespace Karma;
 
-use Interop\Container\ContainerInterface;
 use Invoker\Invoker;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
 use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\ResolverChain;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Handlers\Error;
@@ -21,7 +21,7 @@ use Slim\Interfaces\InvocationStrategyInterface;
 use Slim\Interfaces\RouterInterface;
 use Slim\Router;
 use function DI\get;
-use function DI\object;
+use function DI\create;
 
 class ContainerBuilder
 {
@@ -32,7 +32,7 @@ class ContainerBuilder
      *
      * @return ContainerInterface
      */
-    public static function build(string $containerClass = Container::class, $config = [], $useAnnotations = true)
+    public static function build($containerClass = Container::class, $config = [], $useAnnotations = true)
     {
         $builder = new \DI\ContainerBuilder($containerClass);
 
@@ -72,14 +72,14 @@ class ContainerBuilder
                 'routerCacheFile'                   => get('settings.routerCacheFile'),
             ],
 
-            'errorHandler'      => object(Error::class)
+            'errorHandler'      => create(Error::class)
                 ->constructor(get('settings.displayErrorDetails')),
-            'phpErrorHandler'   => object(PhpError::class)
+            'phpErrorHandler'   => create(PhpError::class)
                 ->constructor(get('settings.displayErrorDetails')),
-            'notFoundHandler'   => object(NotFound::class),
-            'notAllowedHandler' => object(NotAllowed::class),
+            'notFoundHandler'   => create(NotFound::class),
+            'notAllowedHandler' => create(NotAllowed::class),
 
-            'environment' => object(Environment::class)
+            'environment' => create(Environment::class)
                 ->constructor($_SERVER),
 
             ServerRequestInterface::class => function (ContainerInterface $container) {

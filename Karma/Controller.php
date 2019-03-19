@@ -3,7 +3,7 @@
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-abstract class Controller
+abstract class Controller implements ContaineredInterface
 {
     /**
      * @var Request
@@ -27,6 +27,9 @@ abstract class Controller
     {
         $this->request = $request;
         $this->response = $response;
+
+        $this->c()->set('request', $request);
+        $this->c()->set('response', $response);
     }
 
     /**
