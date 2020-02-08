@@ -20,6 +20,7 @@ abstract class Controller implements ContaineredInterface
      *
      * @param Request $request
      * @param Response $response
+     *
      * @see ControllerInvoker
      *
      */
@@ -32,14 +33,6 @@ abstract class Controller implements ContaineredInterface
         $this->getContainer()->set('response', $response);
     }
 
-    /**
-     * @param array $data The data
-     * @param int $status The HTTP status code.
-     * @param int $encodingOptions
-     * @param int $depth
-     *
-     * @return Response
-     */
     public function json(array $data, $status = 200, $encodingOptions = 0, $depth = 512)
     {
         $this->response->getBody()->write(json_encode($data, $encodingOptions, $depth));
@@ -49,18 +42,6 @@ abstract class Controller implements ContaineredInterface
             ->withHeader('Content-Type', 'application/json');
     }
 
-    /**
-     * Xml.
-     *
-     * Note: This method is not part of the PSR-7 standard.
-     *
-     * This method prepares the response object to return an HTTP Xml
-     * response to the client.
-     *
-     * @param mixed $data The data
-     * @param int $status The HTTP status code.
-     * @return Response
-     */
     public function xml($data, $status = 200)
     {
         $this->response->getBody()->write($data);
@@ -68,5 +49,12 @@ abstract class Controller implements ContaineredInterface
         return $this->response
             ->withStatus($status)
             ->withHeader('Content-Type', 'application/xml;charset=utf-8');
+    }
+
+    public function redirect($url, $status = 302)
+    {
+        return $this->response
+            ->withHeader('Location', $url)
+            ->withStatus($status);
     }
 }
