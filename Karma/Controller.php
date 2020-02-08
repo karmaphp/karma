@@ -1,7 +1,7 @@
 <?php namespace Karma;
 
-use Slim\Http\Request;
-use Slim\Http\Response;
+use Slim\Psr7\Request;
+use Slim\Psr7\Response;
 
 abstract class Controller implements ContaineredInterface
 {
@@ -18,30 +18,35 @@ abstract class Controller implements ContaineredInterface
     /**
      * execute after __construct
      *
-     * @see CallableStrategy
-     *
      * @param Request $request
      * @param Response $response
+     * @see ControllerInvoker
+     *
      */
     public function init($request, $response)
     {
         $this->request = $request;
         $this->response = $response;
 
-        $this->c()->set('request', $request);
-        $this->c()->set('response', $response);
+        $this->getContainer()->set('request', $request);
+        $this->getContainer()->set('response', $response);
     }
 
     /**
      * @param array $data The data
      * @param int $status The HTTP status code.
      * @param int $encodingOptions
+     * @param int $depth
      *
      * @return Response
      */
-    public function json(array $data, $status = 200, $encodingOptions = 0)
+    public function json(array $data, $status = 200, $encodingOptions = 0, $depth = 512)
     {
-        return $this->response->withJson($data, $status, $encodingOptions);
+        $this->response->getBody()->write(json_encode($data, $encodingOptions, $depth));
+
+        return $this->response
+            ->withStatus($status)
+            ->withHeader('Content-Type', 'application/json');
     }
 
     /**
@@ -58,17 +63,10 @@ abstract class Controller implements ContaineredInterface
      */
     public function xml($data, $status = 200)
     {
-        $body = $this->response->getBody();
-        $body->rewind();
-        $body->write($data);
+        $this->response->getBody()->write($data);
 
-        $response = $this->response->withHeader('Content-Type', 'application/xml;charset=utf-8');
-
-        if (isset($status)) {
-            return $response->withStatus($status);
-        }
-
-        return $response;
+        return $this->response
+            ->withStatus($status)
+            ->withHeader('Content-Type', 'application/xml;charset=utf-8');
     }
-
 }

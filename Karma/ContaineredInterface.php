@@ -5,5 +5,5 @@ interface ContaineredInterface
     /**
      * @return Container
      */
-    public function c();
+    public function getContainer();
 }

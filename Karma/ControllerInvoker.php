@@ -5,7 +5,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Interfaces\InvocationStrategyInterface;
 
-class CallableStrategy implements InvocationStrategyInterface
+class ControllerInvoker implements InvocationStrategyInterface
 {
     /**
      * @var InvokerInterface
@@ -25,28 +25,29 @@ class CallableStrategy implements InvocationStrategyInterface
      * @param ResponseInterface $response The response object.
      * @param array $routeArguments The route's placeholder arguments
      *
-     * @return ResponseInterface|string The response from the callable.
+     * @return ResponseInterface The response from the callable.
      */
     public function __invoke(
         callable $callable,
         ServerRequestInterface $request,
         ResponseInterface $response,
         array $routeArguments
-    ) {
-        // Inject the request and response by parameter name
-        $parameters = [
-            'request'  => $request,
-            'response' => $response,
-        ];
-
-        // set request and response on base controller if setRequestResponse method exists
+    ): ResponseInterface
+    {
+        // set request and response on base controller if init method exists
         if (method_exists($callable[0], 'init')) {
             $callable[0]->init($request, $response);
         }
 
-        // Inject the route arguments by name
-        $parameters += $routeArguments;
+        $result = $this->invoker->call($callable, $routeArguments);
 
-        return $this->invoker->call($callable, $parameters);
+        if ($result instanceof ResponseInterface) {
+            return $result;
+        }
+
+        // geri dönülmeyen durumlarda hata oluşmasın diye '' yazıldı.
+        $response->getBody()->write($result ?? '');
+
+        return $response;
     }
 }
