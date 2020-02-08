@@ -1,25 +1,17 @@
 <?php namespace Karma;
 
-use DI\ContainerBuilder;
 use Invoker\Invoker;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
 use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\ResolverChain;
+use Psr\Container\ContainerInterface;
 use Slim\App;
-use Slim\Interfaces\CallableResolverInterface;
 
 class AppFactory
 {
-    public static function create($class = Container::class, $config = [], $useAnnotations = true): App
+    public static function create(ContainerInterface $container): App
     {
-        $container = (new ContainerBuilder($class))
-            ->useAnnotations($useAnnotations)
-            ->addDefinitions($config)
-            ->build();
-
-        $container->set(CallableResolverInterface::class, new CallableResolver(new \Invoker\CallableResolver($container)));
-
         $app = \Slim\Factory\AppFactory::createFromContainer($container);
 
         $container->set(App::class, $app);
