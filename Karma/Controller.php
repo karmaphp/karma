@@ -57,4 +57,9 @@ abstract class Controller implements ContaineredInterface
             ->withHeader('Location', $url)
             ->withStatus($status);
     }
+
+    public function isPost()
+    {
+        return $this->request->getMethod() === 'POST';
+    }
 }
