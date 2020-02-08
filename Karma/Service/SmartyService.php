@@ -1,15 +1,17 @@
 <?php namespace Karma\Service;
 
+use Smarty;
+
 class SmartyService
 {
     /**
-     * @var \Smarty
+     * @var Smarty
      */
     protected $smarty;
 
     public function __construct()
     {
-        $this->smarty = new \Smarty();
+        $this->smarty = new Smarty();
     }
 
     public function fetch($template, array $params = [])

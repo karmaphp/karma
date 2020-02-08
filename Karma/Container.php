@@ -1,6 +1,8 @@
 <?php namespace Karma;
 
-class Container extends \DI\Container implements \ArrayAccess
+use ArrayAccess;
+
+class Container extends \DI\Container implements ArrayAccess
 {
     public function __get($name)
     {
