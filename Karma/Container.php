@@ -4,9 +4,11 @@ use ArrayAccess;
 use Slim\Factory\ServerRequestCreatorFactory;
 use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Psr7\Request;
+use Slim\Psr7\Response;
 
 /**
  * @property Request request
+ * @property Response response
  */
 class Container extends \DI\Container implements ArrayAccess
 {
