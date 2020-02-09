@@ -13,6 +13,8 @@ class ContainerBuilder
 
         $container->set(CallableResolverInterface::class, new CallableResolver(new \Invoker\CallableResolver($container)));
 
+        $container->set($class, $container);
+
         return $container;
     }
 }
