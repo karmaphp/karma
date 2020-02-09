@@ -19,7 +19,7 @@ Ortaya koyulan standartlar ve önerileri herkesin benimseyerek kullanması ve ö
 ```json
 {
   "require": {
-    "karmaphp/karma": "0.1.1"
+    "karmaphp/karma": "2.0.*"
   }
 }
 ```
@@ -31,7 +31,7 @@ Ortaya koyulan standartlar ve önerileri herkesin benimseyerek kullanması ve ö
 
 require_once 'vendor/autoload.php';
 
-$app = new \Karma\App();
+$app = \Karma\AppFactory::create();
 
 $app->run();
 ```
@@ -40,7 +40,7 @@ $app->run();
 
 Karma Framework `php-di/php-di` paketi ile birlikte gelmektedir ve varsayılan container olarak **php-di** kullanmaktadır.
 
-Container build ederken ilk parametre olarak Container sınıfı, ikinci olarak da servisler **array** olarak verilmelidir.
+Container build ederken ilk parametre olarak Container sınıfı, ikinci olarak da servisler **array** olarak verilmelidir. Üçüncü parametre olarak $useAnnotations değişkeni varsayılan oloarak true olduğu için annotation injection varsayılan olarak desteklenmektedir ve kullanımı tavsiye edilmektedir.
 
 Container servislerine `$container->get('smarty')` şeklinde ya da `$container->smarty` şeklinde ulaşabilirsiniz.
 
@@ -56,7 +56,7 @@ $container = \Karma\ContainerBuilder::build(
     ]
 );
 
-$app = new \Karma\App($container);
+$app = \Karma\AppFactory::create($container);
 
 $app->run();
 ```
@@ -77,7 +77,7 @@ $container = \Karma\ContainerBuilder::build(
     ]
 );
 
-$app = new \Karma\App($container);
+$app = \Karma\AppFactory::create($container);
 
 $app->get('/', [\App\Controller\MainController::class, 'Index']);
 
@@ -111,21 +111,20 @@ View katmanı için `Smarty` ya da `Twig` gibi bağımsız bir şekilde kullanı
 
 Örnek SmartyService.php `smarty/smarty`
 ```php
-<?php namespace App\Service\View;
+<?php namespace App\Service;
+
+use Smarty;
 
 class SmartyService
 {
     /**
-     * @var \Smarty
+     * @var Smarty
      */
-    private $smarty;
+    protected $smarty;
 
     public function __construct()
     {
-        $this->smarty = new \Smarty();
-
-        $this->smarty->setTemplateDir(ROOT_DIR . '/views/smarty');
-        $this->smarty->setCompileDir(ROOT_DIR . '/views/smarty_c');
+        $this->smarty = new Smarty();
     }
 
     public function fetch($template, array $params = [])
@@ -140,20 +139,23 @@ class SmartyService
 Örnek TwigService.php `twig/twig`
 
 ```php
-<?php namespace App\Service\View;
+<?php namespace App\Service;
+
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 class TwigService
 {
     /**
-     * @var \Twig_Environment
+     * @var Environment
      */
     private $twig;
 
     public function __construct()
     {
-        $loader = new \Twig_Loader_Filesystem(ROOT_DIR . '/views/twig');
+        $loader = new FilesystemLoader(ROOT_DIR . '/views/twig');
 
-        $this->twig = new \Twig_Environment($loader, [
+        $this->twig = new Environment($loader, [
             'cache' => ROOT_DIR . '/views/twig_c',
         ]);
     }

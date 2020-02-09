@@ -3,7 +3,7 @@
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 
-abstract class Controller implements ContaineredInterface
+abstract class Controller
 {
     /**
      * @var Request
@@ -28,9 +28,6 @@ abstract class Controller implements ContaineredInterface
     {
         $this->request = $request;
         $this->response = $response;
-
-        $this->getContainer()->set('request', $request);
-        $this->getContainer()->set('response', $response);
     }
 
     public function json(array $data, $status = 200, $encodingOptions = 0, $depth = 512)
@@ -58,8 +55,60 @@ abstract class Controller implements ContaineredInterface
             ->withStatus($status);
     }
 
+    public function is($method)
+    {
+        return $this->request->getMethod() === strtoupper($method);
+    }
+
+    public function isGet()
+    {
+        return $this->is('GET');
+    }
+
     public function isPost()
     {
-        return $this->request->getMethod() === 'POST';
+        return $this->is('POST');
+    }
+
+    public function isPut()
+    {
+        return $this->is('PUT');
+    }
+
+    public function isDelete()
+    {
+        return $this->is('DELETE');
+    }
+
+    public function param($key, $default = null)
+    {
+        $postParams = $this->request->getParsedBody();
+        $getParams = $this->request->getQueryParams();
+
+        if (is_array($postParams) && isset($postParams[$key])) {
+            return $postParams[$key];
+        }
+
+        if (is_object($postParams) && property_exists($postParams, $key)) {
+            return $postParams->$key;
+        }
+
+        if (isset($getParams[$key])) {
+            return $getParams[$key];
+        }
+
+        return $default;
+    }
+
+    public function params()
+    {
+        $params = $this->request->getQueryParams();
+        $postParams = $this->request->getParsedBody();
+
+        if ($postParams) {
+            $params = array_merge($params, (array)$postParams);
+        }
+
+        return $params;
     }
 }

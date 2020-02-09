@@ -10,8 +10,12 @@ use Slim\App;
 
 class AppFactory
 {
-    public static function create(ContainerInterface $container): App
+    public static function create(?ContainerInterface $container = null): App
     {
+        if (is_null($container)) {
+            $container = ContainerBuilder::build();
+        }
+
         $app = \Slim\Factory\AppFactory::createFromContainer($container);
 
         $container->set(App::class, $app);
