@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/karmaphp/karma/badge.svg?branch=master)](https://coveralls.io/github/karmaphp/karma?branch=master)
 [![Total Downloads](https://poser.pugx.org/karmaphp/karma/downloads)](https://packagist.org/packages/karmaphp/karma)
 
-Mikro frameworklerden Slim Framework üzerine inşa edilmiş bir PHP Application Framework'tür.
+Mikro frameworklerden Slim Framework üzerine inşa edilmiş bir PHP Application Framework'tür. Slim Framework ile tamamen uyumludur. Bu sayfada anlatılanlara ek olarak onun dökümantasyonunu da kullanabilirsiniz.
 
 ## Misyon
 
