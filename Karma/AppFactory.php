@@ -19,6 +19,7 @@ class AppFactory
         $app = \Slim\Factory\AppFactory::createFromContainer($container);
 
         $container->set(App::class, $app);
+        $container->set('app', $app);
 
         $app->getRouteCollector()->setDefaultInvocationStrategy(new ControllerInvoker(new Invoker(new ResolverChain([
             // Inject parameters by name first
