@@ -12,7 +12,7 @@ PHP ile uygulama geliştirmeye alternatif bir çözüm önerisi sunmak. PHP'nin 
 
 ## Vizyon
 
-Ortaya koyulan standartlar ve önerileri herkesin benimseyerek kullanması ve önerilerle genelin ihtiyacını karşılayan bir yapı sunmak. 
+Ortaya koyulan standartlar ve önerileri herkesin benimseyerek kullanması ve önerilerle genelin ihtiyacını karşılayan bir yapı sunmak.
 
 ## Composer ile Yükle
 
@@ -45,7 +45,7 @@ Container build ederken ilk parametre olarak Container sınıfı, ikinci olarak 
 Container servislerine `$container->get('smarty')` şeklinde ya da `$container->smarty` şeklinde ulaşabilirsiniz.
 
 ```php
-<?php 
+<?php
 
 require_once 'vendor/autoload.php';
 
@@ -66,7 +66,7 @@ $app->run();
 Routing stratejisi olarak `[\App\Controller\MainController::class, 'Index']` şeklinde bir kullanım tercih edilmiştir.
 
 ```php
-<?php 
+<?php
 
 require_once 'vendor/autoload.php';
 
@@ -86,7 +86,7 @@ $app->run();
 
 ## Controller
 
-Karma Framework'de yazacağınız bir sınıfı Controller olarak kullanmak mümkün. Controller sınıfları için tavsiye edilen klasör `app/Controller`. 
+Karma Framework'de yazacağınız bir sınıfı Controller olarak kullanmak mümkün. Controller sınıfları için tavsiye edilen klasör `app/Controller`.
 
 ```php
 <?php namespace App\Controller;
@@ -166,6 +166,17 @@ class TwigService
     }
 }
 ```
+
+## Slimframework'den Karmaphp'ye Geçiş
+
+Bu kısımda, mevcut bir projenizde slimframework kullanıyorsanız karmaphp'ye nasıl geçeceğiniz hakkında bilgiler  verilecek.
+
+ * Controller fonksiyonlarında $request ve $response kullanmanıza gerek yok. Bunun yerine Controller içinde $this->request ve $this->response kullanabilirsiniz.
+ * HandleError için kendi Exception sınıflarınızı yazarak `\Karma\ErrorHandler` sınıfını extend ederek invokable bir sınıf ile error handling lojiğinizi geliştirebilirsiniz.
+ * ErrorHandling, Middleware ve Controller içinde $request ve $response kullanmanıza gerek yok. Container üzerinden ya da doğrudan Controller üzerinden $container->request ya da $this->request yazarak Request ve Response objelerine erişebilirsiniz.
+ * Route tanımlarında ikinci parametreyi array vererek, birinci parametresi kendi Controller sınıfınız ikinci parametre olarak da içinde kullanmak istediğiniz fonksiyon adını yazabilirsiniz. Ör: `[MyController.class, 'Edit']`
+ * Request parametrelerini almak için Controller içindeyken `$this->param('customer_id')` fonksiyonunu kullanabilirsiniz.
+ * Gelen requestin POST olduğunu Controller içindeyken `$this->isPost()` fonksiyonu ile test edebilirsiniz.
 
 ## Veritabanı
 Veritabanı işlemleri için orm olarak `illuminate/database` paketi önerilmektedir. Table sınıfları için `app/Table` Repo sınıfları için `app/Repo` klasörü önerilmektedir.

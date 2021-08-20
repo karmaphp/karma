@@ -39,7 +39,19 @@ class ControllerInvoker implements InvocationStrategyInterface
             $callable[0]->init($request, $response);
         }
 
-        $result = $this->invoker->call($callable, $routeArguments);
+        // Inject the request and response by parameter name
+        $parameters = [
+            'request'  => $request,
+            'response' => $response,
+        ];
+
+        // Inject the route arguments by name
+        $parameters += $routeArguments;
+
+        // Inject the attributes defined on the request
+        $parameters += $request->getAttributes();
+
+        $result = $this->invoker->call($callable, $parameters);
 
         if ($result instanceof ResponseInterface) {
             return $result;
