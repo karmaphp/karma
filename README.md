@@ -19,7 +19,7 @@ Ortaya koyulan standartlar ve önerileri herkesin benimseyerek kullanması ve ö
 ```json
 {
   "require": {
-    "karmaphp/karma": "2.0.*"
+    "karmaphp/karma": "^2.2"
   }
 }
 ```
