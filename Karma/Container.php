@@ -36,6 +36,38 @@ class Container extends \DI\Container implements ArrayAccess
         return parent::get($name);
     }
 
+    public function param($key, $default = null)
+    {
+        $postParams = $this->request->getParsedBody();
+        $getParams = $this->request->getQueryParams();
+
+        if (is_array($postParams) && isset($postParams[$key])) {
+            return $postParams[$key];
+        }
+
+        if (is_object($postParams) && property_exists($postParams, $key)) {
+            return $postParams->$key;
+        }
+
+        if (isset($getParams[$key])) {
+            return $getParams[$key];
+        }
+
+        return $default;
+    }
+
+    public function params()
+    {
+        $params = $this->request->getQueryParams();
+        $postParams = $this->request->getParsedBody();
+
+        if ($postParams) {
+            $params = array_merge($params, (array)$postParams);
+        }
+
+        return $params;
+    }
+
     public function __get($name)
     {
         return $this->get($name);
