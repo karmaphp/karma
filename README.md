@@ -1,3 +1,10 @@
+**DEPRECATED** 
+
+Lütfen dikkat, bu proje henüz Slim Framework son haline gelmeden önce şuanki mevcut bazı özellikleri de içeren ve yazılım geliştirmeyi kolaylaştıran bazı pratikleri içeriyordu. 
+Slim Framework tarafındaki bazı gelişmeler, örneğin kendi Container'ından vazgeçip PHP-DI gibi diğer container'ları bir interface üzerinden kullanma gibi geliştirmeleri ve pratikleri
+son versiyonunda içine aldığı için bu projeye artık gerek kalmamıştır. Slim Framework ile başlanan bir projeyi [slim-bridge](https://github.com/PHP-DI/Slim-Bridge)'i dahil ederek 
+kullanmaya devam edebilirsiniz.
+
 # Karma Framework
 
 [![Build Status](https://travis-ci.org/karmaphp/karma.svg?branch=master)](https://travis-ci.org/karmaphp/karma)
